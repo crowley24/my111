@@ -13,9 +13,9 @@
 
     Lampa.Utils.putScriptAsync([  
 
-        'https://crowley24.github.io/NewLogo.js',  
+        'https://github.com/crowley24/main/blob/main/New_quality_v1.js',  
 
-        'https://crowley24.github.io/mob_style.js',
+        'https://github.com/crowley24/main/blob/main/New_quality_v2.js',
 
     ], function () {  
 
