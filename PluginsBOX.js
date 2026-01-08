@@ -354,63 +354,141 @@
       });
 
         Lampa.SettingsApi.addParam({
-            component: 'add_plugin',
-            param: {
-                name: 'Якість на картках',
-                type: 'select',
-                values: {
-                    1: 'Встановити',
-                    2: 'Видалити',
-                },
-            },
-            field: {
-                name: 'Якість на картках',
-                description: 'Відображення якості на постерах фільмів'
-            },
-            onChange: function (value, item) { 
-                var pluginUrl = 'https://crowley24.github.io/quality.js';
-                var pluginName = 'Якість на картках';
-                var index = $(item).data('nthChildIndex'); 
+    component: 'add_plugin',
+    param: {
+        name: 'Відмітки якості на картках', // Змінено назву
+        type: 'select',
+        values: {
+            1: 'Встановити',
+            2: 'Видалити',
+        },
+    },
+    field: {
+        name: 'Відмітки якості на картках', // Змінено назву
+        description: 'Відображення якості на постерах фільмів'
+    },
+    onChange: function (value, item) { 
+        // ВАЖЛИВО: Використовуємо Raw-посилання для GitHub Pages або прямого завантаження
+        var pluginUrl = 'https://raw.githubusercontent.com/crowley24/main/main/New_quality_v2.js';
+        var pluginName = 'Відмітки якості на картках';
+        var index = $(item).data('nthChildIndex'); 
 
-                if (value == '1') {
-                    itemON(pluginUrl, pluginName, '@crowley', pluginName, index); 
+        if (value == '1') {
+            itemON(pluginUrl, pluginName, '@crowley', pluginName, index); 
+        }
+        
+        if (value == '2') {
+            deletePlugin(pluginUrl, index);
+        }
+    },
+    onRender: function (item) { 
+        $('.settings-param__name', item).css('color', '#f3d900'); // Додав # для коректного кольору
+        hideInstall();
+        
+        var pluginUrl = 'https://raw.githubusercontent.com/crowley24/main/main/New_quality_v2.js';
+        var pluginName = 'Відмітки якості на картках';
+        var myResult = checkPlugin(pluginUrl);
+        var pluginsArray = Lampa.Storage.get('plugins') || [];
+        
+        setTimeout(function () {
+            // Використовуємо селектор за назвою для відображення статусу (кружечка)
+            $('div[data-name="' + pluginName + '"]').append('<div class="settings-param__status one"></div>');
+            var pluginStatus = null;
+            
+            for (var i = 0; i < pluginsArray.length; i++) {
+                if (pluginsArray[i].url === pluginUrl) {
+                    pluginStatus = pluginsArray[i].status;
+                    break;
                 }
-                
-                if (value == '2') {
-                    deletePlugin(pluginUrl, index);
-                }
-            },
-            onRender: function (item) { $('.settings-param__name', item).css('color', 'f3d900'); hideInstall()
-                var pluginUrl = 'https://crowley24.github.io/quality.js';
-                var pluginName = 'Якість на картках';
-                var myResult = checkPlugin(pluginUrl);
-                var pluginsArray = Lampa.Storage.get('plugins');
-                
-                setTimeout(function () {
-                    $('div[data-name="' + pluginName + '"]').append('<div class="settings-param__status one"></div>');
-                    var pluginStatus = null;
-                    for (var i = 0; i < pluginsArray.length; i++) {
-                        if (pluginsArray[i].url === pluginUrl) {
-                            pluginStatus = pluginsArray[i].status;
-                            break;
-                        }
-                    }
-                    if (myResult && pluginStatus !== 0) {
-                        $('div[data-name="' + pluginName + '"]').find('.settings-param__status').removeClass('active error').css('background', 'linear-gradient(45deg, #11e400, #36a700)');
-                    } else if (pluginStatus === 0) {
-                        $('div[data-name="' + pluginName + '"]').find('.settings-param__status').removeClass('active error').css('background', 'linear-gradient(45deg, #ff8c00, #d96e00)');
-                    } else {
-                        $('div[data-name="' + pluginName + '"]').find('.settings-param__status').removeClass('active error').css('background', 'linear-gradient(45deg, #ff0000, #c40000)');
-                    }
-                }, 100);
+            }
+            
+            var statusElem = $('div[data-name="' + pluginName + '"]').find('.settings-param__status');
+            
+            if (myResult && pluginStatus !== 0) {
+                statusElem.removeClass('active error').css('background', 'linear-gradient(45deg, #11e400, #36a700)');
+            } else if (pluginStatus === 0) {
+                statusElem.removeClass('active error').css('background', 'linear-gradient(45deg, #ff8c00, #d96e00)');
+            } else {
+                statusElem.removeClass('active error').css('background', 'linear-gradient(45deg, #ff0000, #c40000)');
+            }
+        }, 100);
 
-                // Зберігаємо індекс локально в елементі для коректного фокусування
-                item.on("hover:enter", function (event) {
-                    var localNthChildIndex = focus_back(event);
-                    $(this).data('nthChildIndex', localNthChildIndex);
-                });
-               }
-              });
+        item.on("hover:enter", function (event) {
+            var localNthChildIndex = focus_back(event);
+            $(this).data('nthChildIndex', localNthChildIndex);
+        });
+    }
+});
+
+        Lampa.SettingsApi.addParam({
+    component: 'add_plugin',
+    param: {
+        name: 'Якість в картці фільму', // Назва в списку вибору
+        type: 'select',
+        values: {
+            1: 'Встановити',
+            2: 'Видалити',
+        },
+    },
+    field: {
+        name: 'Якість в картці фільму', // Назва в налаштуваннях
+        description: 'Відображення додаткової інформації про якість фільму в повній картці фільму' // Ваш новий опис
+    },
+    onChange: function (value, item) { 
+        // Посилання на Raw-файл v1
+        var pluginUrl = 'https://raw.githubusercontent.com/crowley24/main/main/New_quality_v1.js';
+        var pluginName = 'Якість в картці фільму';
+        var index = $(item).data('nthChildIndex'); 
+
+        if (value == '1') {
+            itemON(pluginUrl, pluginName, '@crowley', pluginName, index); 
+        }
+        
+        if (value == '2') {
+            deletePlugin(pluginUrl, index);
+        }
+    },
+    onRender: function (item) { 
+        $('.settings-param__name', item).css('color', '#f3d900');
+        hideInstall();
+        
+        var pluginUrl = 'https://raw.githubusercontent.com/crowley24/main/main/New_quality_v1.js';
+        var pluginName = 'Якість в картці фільму';
+        var myResult = checkPlugin(pluginUrl);
+        var pluginsArray = Lampa.Storage.get('plugins') || [];
+        
+        setTimeout(function () {
+            // Додаємо індикатор статусу (кольоровий кружечок)
+            $('div[data-name="' + pluginName + '"]').append('<div class="settings-param__status one"></div>');
+            var pluginStatus = null;
+            
+            for (var i = 0; i < pluginsArray.length; i++) {
+                if (pluginsArray[i].url === pluginUrl) {
+                    pluginStatus = pluginsArray[i].status;
+                    break;
+                }
+            }
+            
+            var statusElem = $('div[data-name="' + pluginName + '"]').find('.settings-param__status');
+            
+            if (myResult && pluginStatus !== 0) {
+                // Зелений - встановлено та активний
+                statusElem.removeClass('active error').css('background', 'linear-gradient(45deg, #11e400, #36a700)');
+            } else if (pluginStatus === 0) {
+                // Помаранчевий - вимкнено
+                statusElem.removeClass('active error').css('background', 'linear-gradient(45deg, #ff8c00, #d96e00)');
+            } else {
+                // Червоний - не встановлено
+                statusElem.removeClass('active error').css('background', 'linear-gradient(45deg, #ff0000, #c40000)');
+            }
+        }, 100);
+
+        item.on("hover:enter", function (event) {
+            var localNthChildIndex = focus_back(event);
+            $(this).data('nthChildIndex', localNthChildIndex);
+        });
+    }
+});
 
         Lampa.SettingsApi.addParam({
     component: 'add_plugin',
