@@ -10,11 +10,15 @@
   Lampa.Manifest.plugins = manifest;    
     
   // Додаємо переклади для нового параметра  
-  if (Lampa.Lang && Lampa.Lang.add) {  
-    Lampa.Lang.add({  
-      settings_interface_text_size: 'Розмір тексту',  
-      settings_interface_text_size_descr: 'Незалежний розмір тексту елементів інтерфейсу'  
-    });  
+  if (typeof Lampa !== 'undefined' && Lampa.Lang) {  
+    try {  
+      Lampa.Lang.add({  
+        settings_interface_text_size: 'Розмір тексту',  
+        settings_interface_text_size_descr: 'Незалежний розмір тексту елементів інтерфейсу'  
+      });  
+    } catch (e) {  
+      console.error('Помилка додавання перекладів:', e);  
+    }  
   }  
     
   // Розширені опції розміру з дробовими значеннями    
@@ -28,23 +32,35 @@
     '12': '12'    
   }, '12');    
     
-  // Новий параметр для розміру тексту    
-  Lampa.Params.select('text_size', {     
-    '08': '8',     
-    '09': '9',     
-    '10': '10',     
-    '11': '11',     
-    '12': '12',     
-    '13': '13',     
-    '14': '14',     
-    '15': '15',     
-    '16': '16'    
-  }, '12');    
+  // Новий параметр для розміру тексту з додатковими налаштуваннями  
+  try {  
+    Lampa.Params.select('text_size', {     
+      '08': '8',     
+      '09': '9',     
+      '10': '10',     
+      '11': '11',     
+      '12': '12',     
+      '13': '13',     
+      '14': '14',     
+      '15': '15',     
+      '16': '16'    
+    }, '12');  
       
+    // Додаємо параметр до розділу інтерфейсу  
+    if (Lampa.Params && Lampa.Params.update) {  
+      Lampa.Params.update('text_size', {  
+        section: 'interface',  
+        name: 'settings_interface_text_size',  
+        descr: 'settings_interface_text_size_descr'  
+      });  
+    }  
+  } catch (e) {  
+    console.error('Помилка реєстрації параметра text_size:', e);  
+  }  
+    
   const getInterfaceSize = () => Lampa.Platform.screen('mobile') ? 10 : parseFloat(Lampa.Storage.field('interface_size')) || 12;    
   const getTextSize = () => parseFloat(Lampa.Storage.field('text_size')) || 12;    
       
-  // Розрахунок кількості карток залежно від розміру інтерфейсу    
   const getCardCount = (interfaceSize) => {    
     if (interfaceSize <= 9) return 8;        
     if (interfaceSize <= 9.5) return 8;      
@@ -59,15 +75,12 @@
     const interfaceSize = getInterfaceSize();    
     const textSize = getTextSize();    
       
-    // Застосовуємо розмір інтерфейсу до body (впливає на компоненти)    
     $('body').css({ fontSize: interfaceSize + 'px' });    
       
-    // Застосовуємо розмір тексту до текстових елементів    
     $('.settings-param__name, .settings-param__value, .settings-param__descr, .full-descr__text, .card__title, .card__genres, .filter__name, .filter__value').css({   
       fontSize: (textSize / interfaceSize) + 'em'   
     });    
         
-    // Оновлюємо кількість карток для Line та Category    
     const cardCount = getCardCount(interfaceSize);    
         
     const originalLine = Lampa.Maker.map('Line').Items.onInit;    
@@ -87,5 +100,5 @@
       
   Lampa.Storage.listener.follow('change', e => {    
     if (e.name == 'interface_size' || e.name == 'text_size') updateSize();    
-  });    
+  };    
 })();
