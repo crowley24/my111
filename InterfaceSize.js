@@ -32,34 +32,21 @@
     '12': '12'    
   }, '12');    
     
-  // Новий параметр для розміру тексту з додатковими налаштуваннями  
-  try {  
-    Lampa.Params.select('text_size', {     
-      '08': '8',     
-      '09': '9',     
-      '10': '10',     
-      '11': '11',     
-      '12': '12',     
-      '13': '13',     
-      '14': '14',     
-      '15': '15',     
-      '16': '16'    
-    }, '12');  
+  // Новий параметр для розміру тексту з префіксом interface_  
+  Lampa.Params.select('interface_text_size', {     
+    '08': '8',     
+    '09': '9',     
+    '10': '10',     
+    '11': '11',     
+    '12': '12',     
+    '13': '13',     
+    '14': '14',     
+    '15': '15',     
+    '16': '16'    
+  }, '12');    
       
-    // Додаємо параметр до розділу інтерфейсу  
-    if (Lampa.Params && Lampa.Params.update) {  
-      Lampa.Params.update('text_size', {  
-        section: 'interface',  
-        name: 'settings_interface_text_size',  
-        descr: 'settings_interface_text_size_descr'  
-      });  
-    }  
-  } catch (e) {  
-    console.error('Помилка реєстрації параметра text_size:', e);  
-  }  
-    
   const getInterfaceSize = () => Lampa.Platform.screen('mobile') ? 10 : parseFloat(Lampa.Storage.field('interface_size')) || 12;    
-  const getTextSize = () => parseFloat(Lampa.Storage.field('text_size')) || 12;    
+  const getTextSize = () => parseFloat(Lampa.Storage.field('interface_text_size')) || 12;    
       
   const getCardCount = (interfaceSize) => {    
     if (interfaceSize <= 9) return 8;        
@@ -99,6 +86,6 @@
   updateSize();    
       
   Lampa.Storage.listener.follow('change', e => {    
-    if (e.name == 'interface_size' || e.name == 'text_size') updateSize();    
-  };    
+    if (e.name == 'interface_size' || e.name == 'interface_text_size') updateSize();    
+  });    
 })();
