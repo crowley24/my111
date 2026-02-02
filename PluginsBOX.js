@@ -423,7 +423,7 @@
         Lampa.SettingsApi.addParam({
     component: 'add_plugin',
     param: {
-        name: 'Якість в картці фільму', // Назва в списку вибору
+        name: 'Якість в картці фільму + UA', // Назва в списку вибору
         type: 'select',
         values: {
             1: 'Встановити',
