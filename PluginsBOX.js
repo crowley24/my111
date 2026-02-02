@@ -431,13 +431,13 @@
         },
     },
     field: {
-        name: 'Якість в картці фільму', // Назва в налаштуваннях
-        description: 'Відображення додаткової інформації про якість фільму в повній картці фільму' // Ваш новий опис
+        name: 'Якість в картці фільму + UA', // Назва в налаштуваннях
+        description: 'Відображення додаткової інформації про якість фільму в повній картці фільму + бейдж наявності українського дубляжа' // Ваш новий опис
     },
     onChange: function (value, item) { 
         // Посилання на Raw-файл v1
-        var pluginUrl = 'https://crowley24.github.io/main/New_quality_v1.js';
-        var pluginName = 'Якість в картці фільму';
+        var pluginUrl = 'https://crowley24.github.io/main/QualityUA.js';
+        var pluginName = 'Якість в картці фільму + UA';
         var index = $(item).data('nthChildIndex'); 
 
         if (value == '1') {
@@ -452,8 +452,8 @@
         $('.settings-param__name', item).css('color', '#f3d900');
         hideInstall();
         
-        var pluginUrl = 'https://crowley24.github.io/main/New_quality_v1.js';
-        var pluginName = 'Якість в картці фільму';
+        var pluginUrl = 'https://crowley24.github.io/main/QualityUA.js';
+        var pluginName = 'Якість в картці фільму + UA';
         var myResult = checkPlugin(pluginUrl);
         var pluginsArray = Lampa.Storage.get('plugins') || [];
         
