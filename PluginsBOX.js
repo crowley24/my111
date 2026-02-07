@@ -1066,18 +1066,18 @@ Lampa.SettingsApi.addParam({
     onChange: function (value) {
         // Нове посилання на плагін
         if (value == '1') {
-            itemON('https://crowley24.github.io/UA-Finder+Mod.js', 'UA_Finder', '@author', 'UA_Finder'); 
+            itemON('https://crowley24.github.io/main/UA-Finder+Mod.js', 'UA_Finder', '@author', 'UA_Finder'); 
             // console.log("nthChildIndex, переданный в itemON:", nthChildIndex);
         }
         // Нове посилання на плагін для видалення
         if (value == '2') {
-            var pluginToRemoveUrl = "https://crowley24.github.io/UA-Finder+Mod.js";
+            var pluginToRemoveUrl = "https://crowley24.github.io/main/UA-Finder+Mod.js";
             deletePlugin(pluginToRemoveUrl);
             // console.log("nthChildIndex, переданный в deletePlugin:", nthChildIndex);
         }
     },
     onRender: function (item) { $('.settings-param__name', item).css('color', 'f3d900'); hideInstall()
-        var myResult = checkPlugin('https://crowley24.github.io/UA-Finder+Mod.js');
+        var myResult = checkPlugin('https://crowley24.github.io/main/UA-Finder+Mod.js');
         var pluginsArray = Lampa.Storage.get('plugins');
         setTimeout(function () {
             // Додаємо індикатор для 'UA_Finder'
@@ -1085,7 +1085,7 @@ Lampa.SettingsApi.addParam({
             var pluginStatus = null;
             for (var i = 0; i < pluginsArray.length; i++) {
                 // Перевіряємо за новим URL
-                if (pluginsArray[i].url === 'https://crowley24.github.io/UA-Finder+Mod.js') {
+                if (pluginsArray[i].url === 'https://crowley24.github.io/main/UA-Finder+Mod.js') {
                     pluginStatus = pluginsArray[i].status;
                     break;
                 }
