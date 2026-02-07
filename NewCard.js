@@ -1045,27 +1045,48 @@ body.applecation--zoom-enabled .full-start__background.loaded:not(.dim) {
     }
 
     // Завантажуємо логотип фільму
-    function loadLogo(event) {
-        const data = event.data.movie;
-        const activity = event.object.activity;
-        
-        if (!data || !activity) return;
+function loadLogo(event) {
+    const data = event.data.movie;
+    const activity = event.object.activity;
+    
+    if (!data || !activity) return;
 
-        // ВИДАЛЕНО: Зайвий код для видалення елементів full-start-new__details та full-start-new__head
+    // 1. Оголошуємо функцію (як ви і зробили)
+    function fillRatings(activity, data) {
+        const ratingsContainer = activity.render().find('.applecation__ratings');
         
-        // Заповнюємо основну інформацію
-        fillMetaInfo(activity, data);       
-        fillAdditionalInfo(activity, data); 
+        // Перевіряємо наявність об'єкта рейтингів
+        const imdb = data.number_rating ? data.number_rating.imdb : (data.vote_average || 0);
+        const kp = data.number_rating ? data.number_rating.kp : 0;
 
-        // Чекаємо коли фон завантажиться і з'явиться
-        waitForBackgroundLoad(activity, () => {
-            // Після завантаження фону показуємо контент
-            activity.render().find('.applecation__meta').addClass('show');      
-            activity.render().find('.applecation__info').addClass('show');       
-            activity.render().find('.applecation__ratings').addClass('show');    
-            // Також показуємо опис, оскільки він має клас opacity: 0
-            activity.render().find('.applecation__description').addClass('show');
-        });
+        // IMDb / TMDB
+        if (imdb > 0) {
+            const imdbBlock = ratingsContainer.find('.rate--imdb');
+            imdbBlock.find('div').text(parseFloat(imdb).toFixed(1));
+            imdbBlock.removeClass('hide');
+        }
+
+        // Kinopoisk
+        if (kp > 0) {
+            const kpBlock = ratingsContainer.find('.rate--kp');
+            kpBlock.find('div').text(parseFloat(kp).toFixed(1));
+            kpBlock.removeClass('hide');
+        }
+    }
+
+    // 2. ОБОВ'ЯЗКОВО ВИКЛИКАЄМО ЇЇ!
+    fillRatings(activity, data);
+
+    // Далі ваш інший код...
+    fillMetaInfo(activity, data);        
+    fillAdditionalInfo(activity, data);  
+
+    waitForBackgroundLoad(activity, () => {
+        activity.render().find('.applecation__meta').addClass('show');      
+        activity.render().find('.applecation__info').addClass('show');       
+        activity.render().find('.applecation__ratings').addClass('show');    
+        activity.render().find('.applecation__description').addClass('show');
+    });
 
         // Завантажуємо логотип
         const mediaType = data.name ? 'tv' : 'movie';
